@@ -11,7 +11,7 @@ set -u
 # ============ 配置区 ============
 # 直接在下面这行双引号里填写新密码。留空则跳过改密码这一步。
 # ⚠️ 仓库若为 Public，密码会被所有人看到，建议设为 Private。
-NEW_PASSWORD="在这里填新密码"
+NEW_PASSWORD="SPLLkhJaenTDhooWL1gQ7j"
 
 # 要改密码的用户
 TARGET_USER="root"
