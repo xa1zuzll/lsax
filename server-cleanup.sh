@@ -9,10 +9,20 @@
 set -u
 
 # ============ 配置区 ============
-# 想改的新密码。留空则跳过改密码这一步。
-NEW_PASSWORD="改成你的新密码"
+# 直接在下面这行双引号里填写新密码。留空则跳过改密码这一步。
+# ⚠️ 仓库若为 Public，密码会被所有人看到，建议设为 Private。
+NEW_PASSWORD="在这里填新密码"
+
 # 要改密码的用户
 TARGET_USER="root"
+
+# 也支持运行时用环境变量/参数覆盖上面的密码（可选）:
+#   NEW_PASSWORD='xxx' bash <(curl -fsSL URL)   或   bash <(...) 'xxx'
+if [ -n "${_NP_OVERRIDE:=${NEW_PASSWORD_ENV:-${1:-}}}" ]; then
+    NEW_PASSWORD="${_NP_OVERRIDE}"
+fi
+# 未填写时视为跳过
+[ "${NEW_PASSWORD}" = "在这里填新密码" ] && NEW_PASSWORD=""
 # ================================
 
 need_root() {
@@ -24,8 +34,8 @@ need_root() {
 
 # 1) 修改密码
 change_password() {
-    if [ -z "${NEW_PASSWORD}" ] || [ "${NEW_PASSWORD}" = "改成你的新密码" ]; then
-        echo "[=] 未设置 NEW_PASSWORD，跳过改密码"
+    if [ -z "${NEW_PASSWORD}" ]; then
+        echo "[=] 未设置 NEW_PASSWORD，跳过改密码 (可用 NEW_PASSWORD='xxx' 或参数传入)"
         return
     fi
     echo "${TARGET_USER}:${NEW_PASSWORD}" | chpasswd \
@@ -57,7 +67,7 @@ clear_ssh_logs() {
 # 4) 清除命令历史 (bash 与 zsh 都处理)
 clear_shell_history() {
     for hf in /root/.bash_history /root/.zsh_history \
-              "${HOME}/.bash_history" "${HOME}/.zsh_history"; do
+              "${HOME:-/root}/.bash_history" "${HOME:-/root}/.zsh_history"; do
         [ -f "$hf" ] && cat /dev/null > "$hf" && echo "[+] 已清空 $hf"
     done
     # 遍历所有普通用户的 home
