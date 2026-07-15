@@ -5,7 +5,7 @@
 set -euo pipefail
 
 # ======================= 需要你填的三项 =======================
-CF_API_TOKEN="cfut_lBV7Jy4Jwj94NmFwUIEm0kgDZai3IV5eNPnjGBSK52ac6288"   # CF API Token
+CF_API_TOKEN="cfut_txMj3vUFtm7hQptQexa597PHyIx1dCadQS5DNgNzb1ff7969"  
 ZONE_NAME="spzones.store"                  # 主域名(根域)
 RECORD_NAME="x87anlz.spzones.store"        # 要更新的完整域名
 # ============================================================
